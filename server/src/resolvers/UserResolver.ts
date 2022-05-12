@@ -95,20 +95,39 @@ export class UserResolver {
 
     const hasedPassword = await bcrypt.hash(options.pasword, 12);
 
-    await User.delete({});
+    // await User.delete({});
 
-    const user = await User.create({
-      username: options.username,
-      password: hasedPassword,
-      firstName: options.firstName,
-      lastName: options.lastName,
-    }).save();
+    try {
+      const user = await User.create({
+        username: options.username,
+        password: hasedPassword,
+        firstName: options.firstName,
+        lastName: options.lastName,
+      }).save();
 
-    response = {
-      user,
-    };
+      response = {
+        user,
+      };
+      return response;
+    } catch (e) {
+      if (e.code === "23505") {
+        response = {
+          error: {
+            field: "username",
+            message: "username taken!!",
+          },
+        };
+      } else {
+        response = {
+          error: {
+            field: "username",
+            message: "error signing up",
+          },
+        };
+      }
 
-    return response;
+      return response;
+    }
   }
 
   @Mutation(() => UserResponse)

@@ -118,17 +118,37 @@ let UserResolver = class UserResolver {
             return response;
         }
         const hasedPassword = await bcrypt_1.default.hash(options.pasword, 12);
-        await User_1.User.delete({});
-        const user = await User_1.User.create({
-            username: options.username,
-            password: hasedPassword,
-            firstName: options.firstName,
-            lastName: options.lastName,
-        }).save();
-        response = {
-            user,
-        };
-        return response;
+        try {
+            const user = await User_1.User.create({
+                username: options.username,
+                password: hasedPassword,
+                firstName: options.firstName,
+                lastName: options.lastName,
+            }).save();
+            response = {
+                user,
+            };
+            return response;
+        }
+        catch (e) {
+            if (e.code === "23505") {
+                response = {
+                    error: {
+                        field: "username",
+                        message: "username taken!!",
+                    },
+                };
+            }
+            else {
+                response = {
+                    error: {
+                        field: "username",
+                        message: "error signing up",
+                    },
+                };
+            }
+            return response;
+        }
     }
     async login(loginOptions) {
         let error;
