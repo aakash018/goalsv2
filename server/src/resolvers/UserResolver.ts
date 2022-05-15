@@ -1,6 +1,7 @@
 import { User } from "../entities/User";
 import {
   Arg,
+  Ctx,
   Field,
   InputType,
   Mutation,
@@ -8,6 +9,8 @@ import {
   Resolver,
 } from "type-graphql";
 import bcrypt from "bcrypt";
+import { MyContex } from "../@types/MyContex";
+import { createRefToken } from "../utils/jwtToken";
 
 @ObjectType()
 class FieldError {
@@ -132,7 +135,8 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async login(
-    @Arg("loginOptions") loginOptions: LoginInput
+    @Arg("loginOptions") loginOptions: LoginInput,
+    @Ctx() { res }: MyContex
   ): Promise<UserResponse> {
     let error: FieldError;
     let response: UserResponse;
@@ -156,6 +160,13 @@ export class UserResolver {
         response = {
           user,
         };
+
+        res.cookie("rid", createRefToken(user.id), {
+          sameSite: "none",
+          secure: true,
+          httpOnly: true,
+          maxAge: 15 * 100 * 60 * 60,
+        });
 
         return response;
       }

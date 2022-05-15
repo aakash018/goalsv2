@@ -1,9 +1,12 @@
-import { Query, Resolver } from "type-graphql";
+import { isAuth } from "../middlewares/isAuth";
+import { Ctx, Query, Resolver, UseMiddleware } from "type-graphql";
+import { MyContex } from "../@types/MyContex";
 
 @Resolver()
 export class Hello {
-    @Query(() => String)
-    hello() {
-        return "Hello World!!"
-    }
+  @Query(() => String)
+  @UseMiddleware(isAuth)
+  hello(@Ctx() {}: MyContex) {
+    return "Hello World!!";
+  }
 }

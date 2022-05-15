@@ -6,10 +6,14 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { Hello } from "./resolvers/hello";
 import { UserResolver } from "./resolvers/UserResolver";
+import { MyContex } from "./@types/MyContex";
+
+import cookieParser from "cookie-parser";
 
 const PORT = 5000;
 
 const app = express();
+app.use(cookieParser());
 
 app.get("/", (_, res) => {
   res.send("SERVER IS RUNNING");
@@ -23,12 +27,12 @@ const apollo = async () => {
       resolvers: [Hello, UserResolver],
       validate: false,
     }),
-    context: () => {},
+    context: ({ req, res }): MyContex => ({ req, res }),
   });
   await apolloServer.start();
   apolloServer.applyMiddleware({
     app,
-    cors: { credentials: true, origin: "*" },
+    cors: { credentials: true, origin: "https://studio.apollographql.com" },
   });
 };
 

@@ -19,6 +19,7 @@ exports.UserResolver = void 0;
 const User_1 = require("../entities/User");
 const type_graphql_1 = require("type-graphql");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jwtToken_1 = require("../utils/jwtToken");
 let FieldError = class FieldError {
 };
 __decorate([
@@ -150,7 +151,7 @@ let UserResolver = class UserResolver {
             return response;
         }
     }
-    async login(loginOptions) {
+    async login(loginOptions, { res }) {
         let error;
         let response;
         const user = await User_1.User.findOne({
@@ -173,6 +174,12 @@ let UserResolver = class UserResolver {
                 response = {
                     user,
                 };
+                res.cookie("rid", (0, jwtToken_1.createRefToken)(user.id), {
+                    sameSite: "none",
+                    secure: true,
+                    httpOnly: true,
+                    maxAge: 15 * 100 * 60 * 60,
+                });
                 return response;
             }
         }
@@ -195,8 +202,9 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),
     __param(0, (0, type_graphql_1.Arg)("loginOptions")),
+    __param(1, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [LoginInput]),
+    __metadata("design:paramtypes", [LoginInput, Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "login", null);
 UserResolver = __decorate([

@@ -8,18 +8,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Hello = void 0;
+const isAuth_1 = require("../middlewares/isAuth");
 const type_graphql_1 = require("type-graphql");
 let Hello = class Hello {
-    hello() {
+    hello({}) {
         return "Hello World!!";
     }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => String),
+    (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
+    __param(0, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], Hello.prototype, "hello", null);
 Hello = __decorate([

@@ -10,8 +10,10 @@ const apollo_server_express_1 = require("apollo-server-express");
 const type_graphql_1 = require("type-graphql");
 const hello_1 = require("./resolvers/hello");
 const UserResolver_1 = require("./resolvers/UserResolver");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const PORT = 5000;
 const app = (0, express_1.default)();
+app.use((0, cookie_parser_1.default)());
 app.get("/", (_, res) => {
     res.send("SERVER IS RUNNING");
 });
@@ -21,12 +23,12 @@ const apollo = async () => {
             resolvers: [hello_1.Hello, UserResolver_1.UserResolver],
             validate: false,
         }),
-        context: () => { },
+        context: ({ req, res }) => ({ req, res }),
     });
     await apolloServer.start();
     apolloServer.applyMiddleware({
         app,
-        cors: { credentials: true, origin: "*" },
+        cors: { credentials: true, origin: "https://studio.apollographql.com" },
     });
 };
 apollo();
