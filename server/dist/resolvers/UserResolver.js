@@ -76,7 +76,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], LoginInput.prototype, "pasword", void 0);
+], LoginInput.prototype, "password", void 0);
 LoginInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], LoginInput);
@@ -152,6 +152,7 @@ let UserResolver = class UserResolver {
         }
     }
     async login(loginOptions, { res }) {
+        console.log(loginOptions);
         let error;
         let response;
         const user = await User_1.User.findOne({
@@ -164,7 +165,7 @@ let UserResolver = class UserResolver {
             };
         }
         else {
-            if (!(await bcrypt_1.default.compare(loginOptions.pasword, user.password))) {
+            if (!(await bcrypt_1.default.compare(loginOptions.password, user.password))) {
                 error = {
                     field: "password",
                     message: "password did not match!",

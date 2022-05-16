@@ -47,7 +47,7 @@ class LoginInput {
   @Field()
   username: string;
   @Field()
-  pasword: string;
+  password: string;
 }
 
 const validateUserOptions = (options: UsernamePasswordInput) => {
@@ -138,6 +138,8 @@ export class UserResolver {
     @Arg("loginOptions") loginOptions: LoginInput,
     @Ctx() { res }: MyContex
   ): Promise<UserResponse> {
+    console.log(loginOptions);
+
     let error: FieldError;
     let response: UserResponse;
 
@@ -151,7 +153,7 @@ export class UserResolver {
         message: "user not found",
       };
     } else {
-      if (!(await bcrypt.compare(loginOptions.pasword, user.password))) {
+      if (!(await bcrypt.compare(loginOptions.password, user.password))) {
         error = {
           field: "password",
           message: "password did not match!",

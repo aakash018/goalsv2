@@ -32,7 +32,10 @@ const apollo = async () => {
   await apolloServer.start();
   apolloServer.applyMiddleware({
     app,
-    cors: { credentials: true, origin: "https://studio.apollographql.com" },
+    cors: {
+      credentials: true,
+      origin: ["https://studio.apollographql.com", "http://localhost:3000"],
+    },
   });
 };
 
