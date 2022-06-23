@@ -1,5 +1,6 @@
 import React, { FormEvent, useRef } from "react";
 import { useLoginMutation } from "../generated/graphql";
+import { setToken } from "../utils/localTokenOP";
 import IntputField from "./shared/IntputField";
 
 const LoginBox: React.FC = () => {
@@ -16,14 +17,20 @@ const LoginBox: React.FC = () => {
       username.current?.value.trim() !== "" ||
       password.current?.value.trim() !== ""
     ) {
-      const resp = await login({
-        loginOptions: {
-          username: username.current!.value,
-          password: password.current!.value,
-        },
-      });
+      try {
+        const resp = await login({
+          loginOptions: {
+            username: username.current!.value,
+            password: password.current!.value,
+          },
+        });
 
-      console.log(resp.data?.login.user);
+        if (resp.data?.login.token) {
+          setToken(resp.data?.login.token);
+        }
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 

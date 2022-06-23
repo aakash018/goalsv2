@@ -44,20 +44,19 @@ export type MutationSignupArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  authToken: ResToken;
   hello: Scalars['String'];
 };
 
-export type User = {
-  __typename?: 'User';
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  username: Scalars['String'];
+export type ResToken = {
+  __typename?: 'ResToken';
+  token: Scalars['String'];
 };
 
 export type UserResponse = {
   __typename?: 'UserResponse';
   error?: Maybe<FieldError>;
-  user?: Maybe<User>;
+  token?: Maybe<Scalars['String']>;
 };
 
 export type UsernamePasswordInput = {
@@ -72,27 +71,28 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', error?: { __typename?: 'FieldError', message: string, field: string } | null, user?: { __typename?: 'User', lastName: string, firstName: string, username: string } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', token?: string | null, error?: { __typename?: 'FieldError', field: string, message: string } | null } };
 
 export type SignupMutationVariables = Exact<{
   options: UsernamePasswordInput;
 }>;
 
 
-export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'UserResponse', error?: { __typename?: 'FieldError', field: string, message: string } | null, user?: { __typename?: 'User', username: string, lastName: string, firstName: string } | null } };
+export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'UserResponse', token?: string | null, error?: { __typename?: 'FieldError', field: string, message: string } | null } };
+
+export type AuthTokenQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AuthTokenQuery = { __typename?: 'Query', authToken: { __typename?: 'ResToken', token: string } };
 
 
 export const LoginDocument = gql`
     mutation Login($loginOptions: LoginInput!) {
   login(loginOptions: $loginOptions) {
+    token
     error {
-      message
       field
-    }
-    user {
-      lastName
-      firstName
-      username
+      message
     }
   }
 }
@@ -104,14 +104,10 @@ export function useLoginMutation() {
 export const SignupDocument = gql`
     mutation Signup($options: UsernamePasswordInput!) {
   signup(options: $options) {
+    token
     error {
       field
       message
-    }
-    user {
-      username
-      lastName
-      firstName
     }
   }
 }
@@ -119,4 +115,15 @@ export const SignupDocument = gql`
 
 export function useSignupMutation() {
   return Urql.useMutation<SignupMutation, SignupMutationVariables>(SignupDocument);
+};
+export const AuthTokenDocument = gql`
+    query AuthToken {
+  authToken {
+    token
+  }
+}
+    `;
+
+export function useAuthTokenQuery(options?: Omit<Urql.UseQueryArgs<AuthTokenQueryVariables>, 'query'>) {
+  return Urql.useQuery<AuthTokenQuery>({ query: AuthTokenDocument, ...options });
 };

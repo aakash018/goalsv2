@@ -1,0 +1,5 @@
+query AuthToken {
+  authToken {
+    token
+  }
+}

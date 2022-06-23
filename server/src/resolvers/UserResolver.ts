@@ -10,7 +10,7 @@ import {
 } from "type-graphql";
 import bcrypt from "bcrypt";
 import { MyContex } from "../@types/MyContex";
-import { createRefToken } from "../utils/jwtToken";
+import { createAuthToken, createRefToken } from "../utils/jwtToken";
 
 @ObjectType()
 class FieldError {
@@ -26,8 +26,8 @@ class UserResponse {
   @Field(() => FieldError, { nullable: true })
   error?: FieldError;
 
-  @Field(() => User, { nullable: true })
-  user?: User;
+  @Field(() => String, { nullable: true })
+  token?: string;
 }
 
 @InputType()
@@ -109,7 +109,7 @@ export class UserResolver {
       }).save();
 
       response = {
-        user,
+        token: createAuthToken(user),
       };
       return response;
     } catch (e) {
@@ -138,8 +138,6 @@ export class UserResolver {
     @Arg("loginOptions") loginOptions: LoginInput,
     @Ctx() { res }: MyContex
   ): Promise<UserResponse> {
-    console.log(loginOptions);
-
     let error: FieldError;
     let response: UserResponse;
 
@@ -160,7 +158,7 @@ export class UserResolver {
         };
       } else {
         response = {
-          user,
+          token: createAuthToken({ user }),
         };
 
         res.cookie("rid", createRefToken(user.id), {

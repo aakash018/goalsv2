@@ -8,18 +8,18 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const createRefToken = (data) => {
     try {
         return jsonwebtoken_1.default.sign({ userID: data }, process.env.JWT_KEY, {
-            expiresIn: "15m",
+            expiresIn: "7d",
         });
     }
     catch (e) {
         console.log(e);
-        return "dfsdf";
+        return null;
     }
 };
 exports.createRefToken = createRefToken;
 const createAuthToken = (data) => {
     return jsonwebtoken_1.default.sign(data, process.env.JWT_KEY, {
-        expiresIn: 60 * 60 * 15,
+        expiresIn: "15m",
     });
 };
 exports.createAuthToken = createAuthToken;

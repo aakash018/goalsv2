@@ -40,9 +40,9 @@ __decorate([
     __metadata("design:type", FieldError)
 ], UserResponse.prototype, "error", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => User_1.User, { nullable: true }),
-    __metadata("design:type", User_1.User)
-], UserResponse.prototype, "user", void 0);
+    (0, type_graphql_1.Field)(() => String, { nullable: true }),
+    __metadata("design:type", String)
+], UserResponse.prototype, "token", void 0);
 UserResponse = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], UserResponse);
@@ -127,7 +127,7 @@ let UserResolver = class UserResolver {
                 lastName: options.lastName,
             }).save();
             response = {
-                user,
+                token: (0, jwtToken_1.createAuthToken)(user),
             };
             return response;
         }
@@ -152,7 +152,6 @@ let UserResolver = class UserResolver {
         }
     }
     async login(loginOptions, { res }) {
-        console.log(loginOptions);
         let error;
         let response;
         const user = await User_1.User.findOne({
@@ -173,7 +172,7 @@ let UserResolver = class UserResolver {
             }
             else {
                 response = {
-                    user,
+                    token: (0, jwtToken_1.createAuthToken)({ user }),
                 };
                 res.cookie("rid", (0, jwtToken_1.createRefToken)(user.id), {
                     sameSite: "none",

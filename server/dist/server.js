@@ -11,6 +11,10 @@ const type_graphql_1 = require("type-graphql");
 const hello_1 = require("./resolvers/hello");
 const UserResolver_1 = require("./resolvers/UserResolver");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const jwtResolver_1 = require("./resolvers/jwtResolver");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const User_1 = require("./entities/User");
+const jwtToken_1 = require("./utils/jwtToken");
 const PORT = 5000;
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());
@@ -20,7 +24,7 @@ app.get("/", (_, res) => {
 const apollo = async () => {
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: await (0, type_graphql_1.buildSchema)({
-            resolvers: [hello_1.Hello, UserResolver_1.UserResolver],
+            resolvers: [hello_1.Hello, UserResolver_1.UserResolver, jwtResolver_1.jwtResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({ req, res }),
@@ -41,6 +45,37 @@ dataSource_1.AppDataSource.initialize()
 })
     .catch((e) => {
     console.log("Error initilizing Data Source !!!", e);
+});
+app.post("/refresh_token", async (req, res) => {
+    const { rid } = req.cookies;
+    if (!rid) {
+        return res.json({
+            ok: false,
+            authToken: "",
+        });
+    }
+    let payload = null;
+    try {
+        payload = jsonwebtoken_1.default.verify(rid, process.env.JWT_KEY);
+    }
+    catch (err) {
+        console.log(err);
+        return res.json({
+            ok: false,
+            authToken: "",
+        });
+    }
+    const user = await User_1.User.findOne(payload.id);
+    if (!user) {
+        return res.json({
+            ok: false,
+            authToken: "",
+        });
+    }
+    return res.json({
+        ok: true,
+        authToken: (0, jwtToken_1.createAuthToken)(user.id),
+    });
 });
 app.listen(PORT, () => {
     console.log("SERVER IS RUNNING !!!");

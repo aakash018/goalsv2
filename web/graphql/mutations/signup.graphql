@@ -1,13 +1,9 @@
 mutation Signup($options: UsernamePasswordInput!) {
   signup(options: $options) {
+    token
     error {
       field
       message
-    }
-    user {
-      username
-      lastName
-      firstName
     }
   }
 }

@@ -1,13 +1,9 @@
 mutation Login($loginOptions: LoginInput!) {
   login(loginOptions: $loginOptions) {
+    token
     error {
-      message
       field
-    }
-    user {
-      lastName
-      firstName
-      username
+      message
     }
   }
 }
