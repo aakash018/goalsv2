@@ -13,6 +13,9 @@ const client = createClient({
 
     if (getToken()) {
       token = getToken() as string;
+      if (token.trim() === "") {
+        token = null;
+      }
     }
 
     return {

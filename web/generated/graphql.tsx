@@ -26,9 +26,15 @@ export type LoginInput = {
   username: Scalars['String'];
 };
 
+export type LogoutResponse = {
+  __typename?: 'LogoutResponse';
+  ok: Scalars['Boolean'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   login: UserResponse;
+  logout: LogoutResponse;
   signup: UserResponse;
 };
 
@@ -74,6 +80,11 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', token?: string | null, error?: { __typename?: 'FieldError', field: string, message: string } | null } };
 
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'Mutation', logout: { __typename?: 'LogoutResponse', ok: boolean } };
+
 export type SignupMutationVariables = Exact<{
   options: UsernamePasswordInput;
 }>;
@@ -111,6 +122,17 @@ export const LoginDocument = gql`
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
+export const LogoutDocument = gql`
+    mutation Logout {
+  logout {
+    ok
+  }
+}
+    `;
+
+export function useLogoutMutation() {
+  return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const SignupDocument = gql`
     mutation Signup($options: UsernamePasswordInput!) {

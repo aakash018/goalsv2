@@ -26,7 +26,7 @@ const Home: React.FC = () => {
         console.log(data);
         if (data.ok) {
           setToken(data.authToken);
-          // Router.push("/dash");
+          Router.push("/dash");
           setLoading(false);
         } else {
           setLoading(false);

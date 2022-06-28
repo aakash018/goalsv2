@@ -3,10 +3,11 @@ import { useClient } from "urql";
 import { getToken, setToken } from "../utils/localTokenOP";
 import Router from "next/router";
 import { refreshAuthToken } from "../utils/refreshAuthToken";
-import { HelloQuery } from "../generated/graphql";
+import { HelloQuery, useLogoutMutation } from "../generated/graphql";
 
 const Dash: React.FC = () => {
   const [loading, setLoading] = useState(true);
+  const [{}, logout] = useLogoutMutation();
 
   useEffect(() => {
     const abortControllerIntervalRefres = new AbortController();
@@ -65,12 +66,21 @@ const Dash: React.FC = () => {
     // refreshAuthToken();
   };
 
+  const handleLogout = async () => {
+    const resp = await logout();
+    if (resp.data?.logout.ok) {
+      setToken("");
+      Router.push("/");
+    }
+  };
+
   if (loading) return <h1>Loading</h1>;
 
   return (
     <div>
       <h2>DASH</h2>
       <button onClick={handleCUNT}>CUNT</button>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
