@@ -1,3 +1,4 @@
+import Router from "next/router";
 import React, { FormEvent, useRef } from "react";
 import { useLoginMutation } from "../generated/graphql";
 import { setToken } from "../utils/localTokenOP";
@@ -27,6 +28,7 @@ const LoginBox: React.FC = () => {
 
         if (resp.data?.login.token) {
           setToken(resp.data?.login.token);
+          Router.push("/dash");
         }
       } catch (err) {
         console.error(err);

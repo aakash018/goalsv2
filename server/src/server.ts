@@ -15,10 +15,18 @@ import jwt from "jsonwebtoken";
 import { User } from "./entities/User";
 import { createAuthToken } from "./utils/jwtToken";
 
+import cors from "cors";
+
 const PORT = 5000;
 
 const app = express();
 app.use(cookieParser());
+app.use(
+  cors({
+    credentials: true,
+    origin: ["https://studio.apollographql.com", "http://localhost:3000"],
+  })
+);
 
 app.get("/", (_, res) => {
   res.send("SERVER IS RUNNING");
@@ -71,6 +79,7 @@ app.post("/refresh_token", async (req, res) => {
 
   try {
     payload = jwt.verify(rid, process.env.JWT_KEY);
+    console.log(payload);
   } catch (err) {
     console.log(err);
 
@@ -80,7 +89,7 @@ app.post("/refresh_token", async (req, res) => {
     });
   }
 
-  const user = await User.findOne(payload.id);
+  const user = await User.findOne({ where: { id: payload.userID } });
 
   if (!user) {
     return res.json({
@@ -90,7 +99,7 @@ app.post("/refresh_token", async (req, res) => {
   }
   return res.json({
     ok: true,
-    authToken: createAuthToken(user.id),
+    authToken: createAuthToken({ user }),
   });
 });
 

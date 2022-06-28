@@ -6,10 +6,10 @@ import { getToken } from "../utils/localTokenOP";
 
 const client = createClient({
   url: "http://localhost:5000/graphql",
-  requestPolicy: "cache-and-network",
+  // requestPolicy: "cache-and-network",
 
   fetchOptions: () => {
-    let token = "";
+    let token = null;
 
     if (getToken()) {
       token = getToken() as string;

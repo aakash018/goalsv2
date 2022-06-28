@@ -15,9 +15,14 @@ const jwtResolver_1 = require("./resolvers/jwtResolver");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const User_1 = require("./entities/User");
 const jwtToken_1 = require("./utils/jwtToken");
+const cors_1 = __importDefault(require("cors"));
 const PORT = 5000;
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());
+app.use((0, cors_1.default)({
+    credentials: true,
+    origin: ["https://studio.apollographql.com", "http://localhost:3000"],
+}));
 app.get("/", (_, res) => {
     res.send("SERVER IS RUNNING");
 });
@@ -57,6 +62,7 @@ app.post("/refresh_token", async (req, res) => {
     let payload = null;
     try {
         payload = jsonwebtoken_1.default.verify(rid, process.env.JWT_KEY);
+        console.log(payload);
     }
     catch (err) {
         console.log(err);
@@ -65,7 +71,7 @@ app.post("/refresh_token", async (req, res) => {
             authToken: "",
         });
     }
-    const user = await User_1.User.findOne(payload.id);
+    const user = await User_1.User.findOne({ where: { id: payload.userID } });
     if (!user) {
         return res.json({
             ok: false,
@@ -74,7 +80,7 @@ app.post("/refresh_token", async (req, res) => {
     }
     return res.json({
         ok: true,
-        authToken: (0, jwtToken_1.createAuthToken)(user.id),
+        authToken: (0, jwtToken_1.createAuthToken)({ user }),
     });
 });
 app.listen(PORT, () => {

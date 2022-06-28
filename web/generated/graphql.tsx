@@ -46,6 +46,7 @@ export type Query = {
   __typename?: 'Query';
   authToken: ResToken;
   hello: Scalars['String'];
+  yo: Scalars['String'];
 };
 
 export type ResToken = {
@@ -84,6 +85,16 @@ export type AuthTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type AuthTokenQuery = { __typename?: 'Query', authToken: { __typename?: 'ResToken', token: string } };
+
+export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type HelloQuery = { __typename?: 'Query', hello: string };
+
+export type YoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type YoQuery = { __typename?: 'Query', yo: string };
 
 
 export const LoginDocument = gql`
@@ -126,4 +137,22 @@ export const AuthTokenDocument = gql`
 
 export function useAuthTokenQuery(options?: Omit<Urql.UseQueryArgs<AuthTokenQueryVariables>, 'query'>) {
   return Urql.useQuery<AuthTokenQuery>({ query: AuthTokenDocument, ...options });
+};
+export const HelloDocument = gql`
+    query Hello {
+  hello
+}
+    `;
+
+export function useHelloQuery(options?: Omit<Urql.UseQueryArgs<HelloQueryVariables>, 'query'>) {
+  return Urql.useQuery<HelloQuery>({ query: HelloDocument, ...options });
+};
+export const YoDocument = gql`
+    query yo {
+  yo
+}
+    `;
+
+export function useYoQuery(options?: Omit<Urql.UseQueryArgs<YoQueryVariables>, 'query'>) {
+  return Urql.useQuery<YoQuery>({ query: YoDocument, ...options });
 };

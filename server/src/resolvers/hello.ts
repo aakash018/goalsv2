@@ -9,4 +9,9 @@ export class Hello {
   hello(@Ctx() {}: MyContex) {
     return "Hello World!!";
   }
+
+  @Query(() => String)
+  yo() {
+    return "YO YO";
+  }
 }

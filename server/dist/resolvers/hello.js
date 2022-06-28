@@ -19,6 +19,9 @@ let Hello = class Hello {
     hello({}) {
         return "Hello World!!";
     }
+    yo() {
+        return "YO YO";
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => String),
@@ -28,6 +31,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], Hello.prototype, "hello", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], Hello.prototype, "yo", null);
 Hello = __decorate([
     (0, type_graphql_1.Resolver)()
 ], Hello);

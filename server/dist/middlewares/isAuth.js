@@ -7,13 +7,22 @@ exports.isAuth = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const isAuth = async ({ context }, next) => {
     if (context.req.cookies.rid) {
-        const { rid } = context.req.cookies;
-        const token = jsonwebtoken_1.default.verify(rid, process.env.JWT_KEY);
-        if (!token) {
+        const tokenString = context.req.headers.authorization;
+        if (!tokenString) {
             throw "Not authenticated";
         }
-        globalThis.LoggedInUserID = token.userID;
-        return next();
+        const jid = tokenString.split(" ")[1];
+        try {
+            const token = jsonwebtoken_1.default.verify(jid, process.env.JWT_KEY);
+            if (!token) {
+                throw "Not authenticated";
+            }
+            return next();
+        }
+        catch (err) {
+            console.error(err);
+            throw "Error in authorization! try reloggin in";
+        }
     }
     else {
         throw "no cookie found";
