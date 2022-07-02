@@ -1,0 +1,24 @@
+.loginHeader {
+    position: absolute;
+    top: 0;
+
+    nav {
+        width: 150px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        margin-left: 30px;
+        margin-top: 10px;
+
+        gap: 10px;
+
+        .text {
+            font-size: 2rem;
+            font-weight: bold;
+
+            letter-spacing: 3px;
+        }
+    }
+}

@@ -20,6 +20,7 @@ const User_1 = require("../entities/User");
 const type_graphql_1 = require("type-graphql");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jwtToken_1 = require("../utils/jwtToken");
+const isAuth_1 = require("../middlewares/isAuth");
 let FieldError = class FieldError {
 };
 __decorate([
@@ -46,6 +47,15 @@ __decorate([
 UserResponse = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], UserResponse);
+let LogoutResponse = class LogoutResponse {
+};
+__decorate([
+    (0, type_graphql_1.Field)(() => Boolean),
+    __metadata("design:type", Boolean)
+], LogoutResponse.prototype, "ok", void 0);
+LogoutResponse = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], LogoutResponse);
 let UsernamePasswordInput = class UsernamePasswordInput {
 };
 __decorate([
@@ -172,7 +182,7 @@ let UserResolver = class UserResolver {
             }
             else {
                 response = {
-                    token: (0, jwtToken_1.createAuthToken)({ user }),
+                    token: (0, jwtToken_1.createAuthToken)({ userID: user.id }),
                 };
                 res.cookie("rid", (0, jwtToken_1.createRefToken)(user.id), {
                     sameSite: "none",
@@ -191,6 +201,12 @@ let UserResolver = class UserResolver {
         };
         return response;
     }
+    async logout({ res }) {
+        res.clearCookie("rid", { path: "/", domain: "localhost" });
+        return {
+            ok: true,
+        };
+    }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),
@@ -207,6 +223,14 @@ __decorate([
     __metadata("design:paramtypes", [LoginInput, Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "login", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => LogoutResponse),
+    (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
+    __param(0, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "logout", null);
 UserResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], UserResolver);

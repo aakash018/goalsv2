@@ -7,10 +7,12 @@ import {
   Mutation,
   ObjectType,
   Resolver,
+  UseMiddleware,
 } from "type-graphql";
 import bcrypt from "bcrypt";
 import { MyContex } from "../@types/MyContex";
 import { createAuthToken, createRefToken } from "../utils/jwtToken";
+import { isAuth } from "../middlewares/isAuth";
 
 @ObjectType()
 class FieldError {
@@ -28,6 +30,12 @@ class UserResponse {
 
   @Field(() => String, { nullable: true })
   token?: string;
+}
+
+@ObjectType()
+class LogoutResponse {
+  @Field(() => Boolean)
+  ok: boolean;
 }
 
 @InputType()
@@ -158,7 +166,7 @@ export class UserResolver {
         };
       } else {
         response = {
-          token: createAuthToken({ user }),
+          token: createAuthToken({ userID: user.id }),
         };
 
         res.cookie("rid", createRefToken(user.id), {
@@ -180,5 +188,15 @@ export class UserResolver {
     };
 
     return response;
+  }
+
+  @Mutation(() => LogoutResponse)
+  @UseMiddleware(isAuth)
+  async logout(@Ctx() { res }: MyContex): Promise<LogoutResponse> {
+    res.clearCookie("rid", { path: "/", domain: "localhost" });
+
+    return {
+      ok: true,
+    };
   }
 }

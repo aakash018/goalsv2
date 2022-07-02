@@ -1,0 +1,24 @@
+.alertBox {
+    width: 100%;
+    height: 50px;
+
+    font-size: 1.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: black;
+    font-weight: bold;
+
+    border-radius: 10px;
+}
+
+.alertMessage {
+    background-color: var(--theme-green);
+}
+
+.alertError {
+    background-color: var(--theme-red);
+    color: aliceblue;
+}

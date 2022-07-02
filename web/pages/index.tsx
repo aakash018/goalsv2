@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import LoginBox from "../components/LoginBox";
 
-import styles from "../styles/Home.module.scss";
 import { setToken } from "../utils/localTokenOP";
 import Router from "next/router";
+import Image from "next/image";
+import styles from "../styles/pages/index.module.scss";
+import Header from "../components/Header";
+import Head from "next/head";
 
 interface AuthTokenFetchProps {
   ok: boolean;
@@ -49,9 +52,27 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className={styles.home}>
-      <LoginBox />
-    </div>
+    <>
+      <Head>
+        <title>Goals || Login</title>
+      </Head>
+      <Header />
+      <div className={styles.home}>
+        <div className={styles.hero}>
+          <div className={styles.heroImg}>
+            <Image
+              src={"/img/goals.jpg"}
+              layout="fill"
+              className={styles.img}
+              priority={true}
+            />
+          </div>
+        </div>
+        <div className={styles.login}>
+          <LoginBox />
+        </div>
+      </div>
+    </>
   );
 };
 

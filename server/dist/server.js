@@ -62,7 +62,6 @@ app.post("/refresh_token", async (req, res) => {
     let payload = null;
     try {
         payload = jsonwebtoken_1.default.verify(rid, process.env.JWT_KEY);
-        console.log(payload);
     }
     catch (err) {
         console.log(err);
@@ -78,9 +77,10 @@ app.post("/refresh_token", async (req, res) => {
             authToken: "",
         });
     }
+    console.log(user);
     return res.json({
         ok: true,
-        authToken: (0, jwtToken_1.createAuthToken)({ user }),
+        authToken: (0, jwtToken_1.createAuthToken)({ userID: user.id }),
     });
 });
 app.listen(PORT, () => {

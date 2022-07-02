@@ -5,6 +5,8 @@ interface Props {
   placeholder?: string;
   type?: React.HTMLInputTypeAttribute;
   input: LegacyRef<HTMLInputElement>;
+  id?: string;
+  className?: string;
 }
 
 const IntputField: React.FC<Props> = ({
@@ -12,19 +14,22 @@ const IntputField: React.FC<Props> = ({
   label,
   type = "text",
   input,
+  id,
+  className,
 }) => {
   return (
-    <>
-      <label htmlFor="inputField" style={{ display: "block" }}>
+    <div>
+      <label htmlFor={id} style={{ display: "block" }}>
         {label}
       </label>
       <input
         type={type}
-        id="inputField"
+        id={id}
         placeholder={placeholder}
         ref={input}
+        className={className}
       />
-    </>
+    </div>
   );
 };
 

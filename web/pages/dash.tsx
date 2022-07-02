@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useClient } from "urql";
-import { getToken, setToken } from "../utils/localTokenOP";
+import { setToken } from "../utils/localTokenOP";
 import Router from "next/router";
 import { refreshAuthToken } from "../utils/refreshAuthToken";
 import { HelloQuery, useLogoutMutation } from "../generated/graphql";
 
+import styles from "../styles/pages/dash.module.scss";
+import { generateRandom } from "../utils/randomNum";
+
+type Fuck = {
+  cordT: number;
+  cordL: number;
+};
+
 const Dash: React.FC = () => {
   const [loading, setLoading] = useState(true);
+
+  const [fucks, setFucks] = useState<Fuck[]>([]);
+
   const [{}, logout] = useLogoutMutation();
 
   useEffect(() => {
@@ -52,6 +63,13 @@ const Dash: React.FC = () => {
   const client = useClient();
 
   const handleCUNT = () => {
+    setFucks((prev) =>
+      prev.concat({
+        cordT: generateRandom(0, 500),
+        cordL: generateRandom(0, 1000),
+      })
+    );
+
     client
       .query<HelloQuery>(
         `query Hello {
@@ -79,8 +97,21 @@ const Dash: React.FC = () => {
   return (
     <div>
       <h2>DASH</h2>
-      <button onClick={handleCUNT}>CUNT</button>
+      <button onClick={handleCUNT}>SHIT</button>
       <button onClick={handleLogout}>Logout</button>
+
+      <div className={styles.fuckHouse}>
+        {fucks.map((fuck) => (
+          <div
+            style={{
+              position: "absolute",
+              top: fuck.cordT,
+              left: fuck.cordL,
+              fontSize: 80,
+            }}
+          ></div>
+        ))}
+      </div>
     </div>
   );
 };

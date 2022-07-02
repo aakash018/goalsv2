@@ -1,0 +1,16 @@
+.prmBtn {
+    padding: 0.8rem 4rem;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+
+    background-color: var(--theme-color);
+    color: white;
+
+    font-weight: bolder;
+    font-size: 1.6rem;
+}
+
+.prmBtn:disabled {
+    cursor: not-allowed;
+}

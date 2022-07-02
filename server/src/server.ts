@@ -79,7 +79,6 @@ app.post("/refresh_token", async (req, res) => {
 
   try {
     payload = jwt.verify(rid, process.env.JWT_KEY);
-    console.log(payload);
   } catch (err) {
     console.log(err);
 
@@ -97,9 +96,12 @@ app.post("/refresh_token", async (req, res) => {
       authToken: "",
     });
   }
+
+  console.log(user);
+
   return res.json({
     ok: true,
-    authToken: createAuthToken({ user }),
+    authToken: createAuthToken({ userID: user.id }),
   });
 });
 
