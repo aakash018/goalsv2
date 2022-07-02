@@ -7,6 +7,7 @@ import IntputField from "./shared/IntputField";
 import styles from "../styles/components/LoginBox.module.scss";
 import Btn from "./shared/Btn";
 import AlertBox from "./shared/AlertBox";
+import Link from "next/link";
 
 const LoginBox: React.FC = () => {
   const username = useRef<HTMLInputElement>(null);
@@ -116,6 +117,12 @@ const LoginBox: React.FC = () => {
           </Btn>
         </div>
       </form>
+      <span>
+        don't have an account? signup{" "}
+        <Link href={"/signup"}>
+          <u style={{ color: "blue", cursor: "pointer" }}>here</u>
+        </Link>
+      </span>
     </div>
   );
 };

@@ -1,6 +1,12 @@
 import React, { FormEvent, useRef } from "react";
 import { useSignupMutation } from "../generated/graphql";
 import IntputField from "./shared/IntputField";
+import styles from "../styles/pages/signup.module.scss";
+import Btn from "./shared/Btn";
+import Header from "./Header";
+
+import { BsFillArrowLeftCircleFill } from "react-icons/bs";
+import Link from "next/link";
 
 const SignupBox: React.FC = () => {
   const firstname = useRef<HTMLInputElement>(null);
@@ -8,6 +14,7 @@ const SignupBox: React.FC = () => {
   const username = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const cpassword = useRef<HTMLInputElement>(null);
+  const email = useRef<HTMLInputElement>(null);
 
   const [{}, signup] = useSignupMutation();
 
@@ -27,16 +34,62 @@ const SignupBox: React.FC = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <IntputField label="Firstname" input={firstname} />
-        <IntputField label="Lastname" input={lastname} />
-        <IntputField label="Username" input={username} />
-        <IntputField label="Password" input={password} />
-        <IntputField label="Confirm Password" input={cpassword} />
-        <button type="submit">Signup</button>
-      </form>
-    </div>
+    <>
+      <Header />
+      <div className={styles.signupWrapper}>
+        <div className={styles.signup}>
+          <form onSubmit={handleSubmit}>
+            <div className={styles.formAndBtn}>
+              <div className={styles.fildes}>
+                <div>
+                  <IntputField
+                    label="Firstname"
+                    input={firstname}
+                    id="signupFirstname"
+                  />
+                  <IntputField
+                    label="Lastname"
+                    input={lastname}
+                    id="signupLastname"
+                  />
+                </div>
+                <div>
+                  <IntputField
+                    label="Username"
+                    input={username}
+                    id="signupUsername"
+                  />
+                  <IntputField label="Email" input={email} id="signupEmail" />
+                </div>
+                <div>
+                  <IntputField
+                    label="Password"
+                    input={password}
+                    id="signupPassword"
+                  />
+                  <IntputField
+                    label="Confirm Password"
+                    input={cpassword}
+                    id="signupCPassword"
+                  />
+                </div>
+              </div>
+              <div className={styles.buttons}>
+                <Btn type="submit" disabled={false}>
+                  Signup
+                </Btn>
+                <Link href={"/"}>
+                  <BsFillArrowLeftCircleFill
+                    fontSize={"2.7rem"}
+                    cursor="pointer"
+                  />
+                </Link>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
   );
 };
 

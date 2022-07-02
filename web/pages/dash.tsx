@@ -101,15 +101,18 @@ const Dash: React.FC = () => {
       <button onClick={handleLogout}>Logout</button>
 
       <div className={styles.fuckHouse}>
-        {fucks.map((fuck) => (
+        {fucks.map((fuck, i) => (
           <div
+            key={i}
             style={{
               position: "absolute",
               top: fuck.cordT,
               left: fuck.cordL,
               fontSize: 80,
             }}
-          ></div>
+          >
+            FUCK
+          </div>
         ))}
       </div>
     </div>
