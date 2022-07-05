@@ -23,13 +23,20 @@ const Dash: React.FC = () => {
   useEffect(() => {
     const abortControllerIntervalRefres = new AbortController();
     const req = async () => {
-      const token = await refreshAuthToken(abortControllerIntervalRefres);
+      try {
+        const token = await refreshAuthToken(abortControllerIntervalRefres);
+        console.log(token);
+        if (!token) throw "No token found!!! Try relogging in";
+        if (token) {
+          setToken(token);
+          setLoading(false);
+        }
+      } catch (err: any) {
+        console.log("YOYO", err.name);
 
-      if (token) {
-        setToken(token);
-        setLoading(false);
-      } else {
-        Router.push("/");
+        if (err.name !== "AbortError") {
+          Router.push("/");
+        }
       }
     };
     req();
@@ -44,9 +51,10 @@ const Dash: React.FC = () => {
       try {
         const token = await refreshAuthToken(abortControllerIntervalRefresh);
 
+        if (!token) throw "No token found!!! Try relogging in";
+
         if (token) {
           setToken(token);
-          setLoading(false);
         }
       } catch (err) {
         console.log(err);

@@ -6,9 +6,11 @@ interface Responde {
 }
 
 export const refreshAuthToken = async (abortController: AbortController) => {
-  const token = getToken();
+  // const token = getToken();
 
-  if (!token) throw "No token found!! Try to relogin";
+  // if (!token) {
+  //   return null;
+  // }
 
   const response = await fetch("http://localhost:5000/refresh_token", {
     method: "POST",
@@ -20,6 +22,8 @@ export const refreshAuthToken = async (abortController: AbortController) => {
 
   if (data.ok) {
     return data.authToken;
+  } else {
+    return null;
   }
 
   //   fetch("http://localhost:5000/refresh_token", {
