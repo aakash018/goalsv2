@@ -5,6 +5,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .errorContainer {
+        width: 400px;
+
+        align-self: flex-start;
+
+        margin-bottom: 40px;
+    }
 }
 
 .signup {

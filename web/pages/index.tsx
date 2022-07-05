@@ -53,9 +53,9 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <Head>
+      {/* <Head>
         <title>Goals || Login</title>
-      </Head>
+      </Head> */}
       <Header />
       <div className={styles.home}>
         <div className={styles.hero}>

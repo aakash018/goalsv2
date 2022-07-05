@@ -137,7 +137,7 @@ let UserResolver = class UserResolver {
                 lastName: options.lastName,
             }).save();
             response = {
-                token: (0, jwtToken_1.createAuthToken)(user),
+                token: (0, jwtToken_1.createAuthToken)({ userID: user.id }),
             };
             return response;
         }
@@ -151,6 +151,7 @@ let UserResolver = class UserResolver {
                 };
             }
             else {
+                console.log(e);
                 response = {
                     error: {
                         field: "username",

@@ -117,7 +117,7 @@ export class UserResolver {
       }).save();
 
       response = {
-        token: createAuthToken(user),
+        token: createAuthToken({ userID: user.id }),
       };
       return response;
     } catch (e) {
@@ -129,6 +129,7 @@ export class UserResolver {
           },
         };
       } else {
+        console.log(e);
         response = {
           error: {
             field: "username",
